@@ -1,20 +1,36 @@
 <template>
   <div class="register-container">
-    <h2>Register</h2>
+    <h2>Register your account</h2>
+
     <form @submit.prevent="handleRegister">
       <div class="form-group">
-        <label>Username</label>
-        <input v-model="username" type="text" placeholder="Enter username" required />
+        <label>Name</label>
+        <input v-model="fullName" type="text" placeholder="Enter your full name..." required />
       </div>
 
       <div class="form-group">
-        <label>Email</label>
-        <input v-model="email" type="email" placeholder="Enter email" required />
+        <label>Surname</label>
+        <input v-model="surname" type="text" placeholder="Enter your surname..." required />
+      </div>
+
+      <div class="form-group">
+        <label>Username</label>
+        <input v-model="username" type="text" placeholder="Enter a username..." required />
+      </div>
+
+      <div class="form-group">
+        <label>Email address</label>
+        <input v-model="email" type="email" placeholder="Enter your email address..." required />
       </div>
 
       <div class="form-group">
         <label>Password</label>
-        <input v-model="password" type="password" placeholder="Enter password" required />
+        <input v-model="password" type="password" placeholder="Enter your password..." required />
+      </div>
+
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input v-model="confirmPassword" type="password" placeholder="Enter your password again..." required />
       </div>
 
       <div class="form-group">
@@ -26,49 +42,39 @@
         </select>
       </div>
 
-      <button type="submit" :disabled="loading">
-        {{ loading ? "Registering..." : "Register" }}
+      <button type="submit">
+        Sign up
       </button>
-
-      <p v-if="error" class="error">{{ error }}</p>
     </form>
 
     <p class="login-link">
-      Already have an account?
-      <router-link to="/login">Login here</router-link>
+      Already have an account? <router-link to="/login">Sign in</router-link>
     </p>
   </div>
 </template>
 
 <script>
-import auth from '../stores/auth.js'
-
 export default {
   name: "RegisterView",
   data() {
     return {
+      fullName: "",
       username: "",
       email: "",
       password: "",
-      role: "",
-      loading: false,
-      error: null,
+      confirmPassword: "",
+      role: ""
     }
   },
   methods: {
-    async handleRegister() {
-      this.error = null;
-      this.loading = true;
-      try {
-      
-        await auth.register(this.username, this.email, this.password, this.role);
-
-        this.$router.push("/login");
-      } catch (err) {
-        this.error = err.message;
-      } finally {
-        this.loading = false;
-      }
+    handleRegister() {
+      console.log('Registering:', {
+        fullName: this.fullName,
+        username: this.username,
+        email: this.email,
+        password: this.password,
+        role: this.role
+      });
     }
   }
 }
@@ -82,12 +88,30 @@ export default {
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  font-family: Arial, sans-serif;
 }
-h2 { text-align: center; margin-bottom: 20px; }
-.form-group { margin-bottom: 15px; display: flex; flex-direction: column; }
-label { margin-bottom: 5px; font-weight: bold; }
-input, select { padding: 8px; border-radius: 5px; border: 1px solid #ccc; }
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input, select {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
 button {
   width: 100%;
   padding: 10px;
@@ -98,7 +122,9 @@ button {
   border-radius: 5px;
   cursor: pointer;
 }
-button:disabled { background-color: #7aaefc; cursor: not-allowed; }
-.error { color: red; margin-top: 10px; text-align: center; }
-.login-link { text-align: center; margin-top: 15px; }
+
+.login-link {
+  text-align: center;
+  margin-top: 15px;
+}
 </style>
